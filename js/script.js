@@ -1,40 +1,80 @@
+let ALL_SEPARATORS_REGEX = /(?:\^A|[\|\x01\n])/g;
+
 var app = new Vue({
     el: '#app',
     data: {
         fixMessages: [{
             text: ''
-        }]
+        }],
+        fieldsByTag: {},
+        fixEnums: {},
+        replacementSeparator: "0"
     },
     computed: {
-        formattedFix: function() {
-            return formattedFix(this.fixMessages);
+        formattedFix: function () {
+            return formattedFix(this.fixMessages, this.fieldsByTag, this.fixEnums);
         }
     },
     methods: {
-        addMessage: function(afterIndex) {
+        addMessage: function (afterIndex, text) {
             let item = {
-                text: ''
+                text: text ? text : ''
             };
             this.fixMessages.splice(afterIndex + 1, 0, item);
         },
-        duplicateMessage: function(afterIndex) {
+        duplicateMessage: function (afterIndex) {
             let item = {
                 text: this.fixMessages[afterIndex].text
             };
             this.fixMessages.splice(afterIndex + 1, 0, item);
         },
-        removeMessage: function(index) {
+        removeMessage: function (index) {
             if (this.fixMessages.length > 1) {
                 this.fixMessages.splice(index, 1);
             } else {
                 this.fixMessages[0].text = '';
             }
+        },
+        replaceSeparators: function (index) {
+            let newSeparator = '|';
+            switch (this.replacementSeparator) {
+                case "1":
+                    newSeparator = '^A';
+                    break;
+                case "2":
+                    newSeparator = '\x01';
+                    break;
+                case "3":
+                    newSeparator = '\n';
+                    break;
+                default:
+                    newSeparator = '|';
+                    break;
+            }
+            console.log(this.fixMessages[index].text);
+            this.fixMessages[index].text = this.fixMessages[index].text.replace(ALL_SEPARATORS_REGEX, newSeparator);
+            console.log(this.fixMessages[index].text.replace(ALL_SEPARATORS_REGEX, newSeparator));
+        },
+        onPaste: function (e, fixMessageIndex) {
+            let clipboardData = e.clipboardData || window.clipboardData;
+            let pastedData = clipboardData.getData('Text');
+            let messages = asMultipleMessages(pastedData);
+            if (messages.length > 1) {
+                e.stopPropagation();
+                e.preventDefault();
+                this.fixMessages[fixMessageIndex].text = messages[0];
+                for (let i = 1; i < messages.length; i++) {
+                    this.addMessage(++fixMessageIndex, messages[i]);
+                }
+                return false;
+            } else {
+                return true;
+            }
         }
     }
 });
 
-function formattedFix(fixMessages) {
-    console.log(fixMessages);
+function formattedFix(fixMessages, fieldsByTag, fixEnums) {
     let fixMessageFields = fixMessages.map(splitRawFix);
     let allFields = new Set();
     let popularity = {};
@@ -52,7 +92,6 @@ function formattedFix(fixMessages) {
             popularity[fieldTag][fieldValue] = (popularity[fieldTag][fieldValue] || 0) + 1;
         });
     });
-    console.log(popularity);
     let fieldKeys = Array.from(allFields);
     fieldKeys.sort();
     let result = [];
@@ -61,13 +100,14 @@ function formattedFix(fixMessages) {
             let valuePopularities = Object.keys(popularity[i]);
             let singleValue = (valuePopularities.length == 1);
             valuePopularities.forEach(valuePopularity => {
+                let pop = popularity[i][valuePopularity];
                 if (fixMessages.length == 1) {
                     popularity[i][valuePopularity] = -1;
                 } else if (singleValue) {
                     popularity[i][valuePopularity] = 4;
-                } else if (popularity[i][valuePopularity] == fixMessages.length - 1) {
+                } else if ((pop == fixMessages.length - 1 && (pop > 1))) {
                     popularity[i][valuePopularity] = 3;
-                } else if (popularity[i][valuePopularity] > 1) {
+                } else if (pop > 1) {
                     popularity[i][valuePopularity] = 2;
                 } else {
                     popularity[i][valuePopularity] = 1;
@@ -76,19 +116,23 @@ function formattedFix(fixMessages) {
         }
         result.push({
             number: i,
-            name: fields_by_tag[i],
+            name: fieldsByTag[i] || '<Custom>',
             annotatedValues: fixMessageFields.map((fields, messageIndex) => {
                 let allEmpty = fixMessages[messageIndex].text.trim().length == 0;
                 let annotatedValues = {
                     values: []
                 };
+                let values = [];
                 fields.forEach(field => {
                     if (field[0] == i) {
-                        annotatedValues.values.push(field[1]);
+                        values.push(field[1]);
+                        annotatedValues.values.push(
+                            (i in fixEnums) ? `${fixEnums[i][field[1]] || '<Custom>'} (${field[1]})` : field[1]
+                        );
                     }
                 });
-                let valuePopularity = JSON.stringify(annotatedValues.values);
-                annotatedValues.popularity = popularity[i][valuePopularity] ? popularity[i][valuePopularity] : (allEmpty ? -1 : 0);                
+                let valuePopularity = JSON.stringify(values);
+                annotatedValues.popularity = popularity[i][valuePopularity] ? popularity[i][valuePopularity] : (allEmpty ? -1 : 0);
                 return annotatedValues;
             })
         });
@@ -96,8 +140,17 @@ function formattedFix(fixMessages) {
     return result;
 }
 
+function asMultipleMessages(rawFix) {
+    let newLineIndex = rawFix.indexOf('\n');
+    if (rawFix.search(/(?:^A|[\|\x01])/) != -1 && newLineIndex != -1 && newLineIndex != rawFix.length - 1) {
+        return rawFix.split('\n');
+    } else {
+        return [rawFix];
+    }
+}
+
 function splitRawFix(rawFix) {
-    let rawFields = rawFix.text.split(/(?:^A|[\|\x01\n])/g);
+    let rawFields = rawFix.text.split(ALL_SEPARATORS_REGEX);
     return rawFields.map(splitRawField)
 }
 
@@ -109,3 +162,8 @@ function splitRawField(rawField) {
         return [-1, rawField];
     }
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    var elems = document.querySelectorAll('select');
+    var instances = M.FormSelect.init(elems, {});
+});

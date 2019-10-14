@@ -18,17 +18,49 @@
     background-color: mediumspringgreen;
 }
 
-td {
-    font-family: Consolas, 'Courier New', Courier, monospace;
-    line-height: 1;
-    padding: 0.1rem;
+.title-cell {
+    vertical-align: top;
 }
 
-thead {
+.fixed-column {
+    width: 10rem;
+}
+
+.card-content {
+    height: 100%;
+}
+
+.input-field {
+    height: 100%;
+}
+
+.empty-row {
+    color: gray;
+}
+
+.card {
+    min-width: 15rem;
+}
+
+body {
+    background-color: ghostwhite;
+}
+
+tbody tr td {
+    font-family: Consolas, 'Courier New', Courier, monospace;
+    font-size: 11pt;
+    line-height: 1;
+    padding: 0.1rem;
+    word-break: break-all;
+}
+
+.table-heading {
     font-weight: bold;
 }
 
 textarea {
     font-family: Consolas, 'Courier New', Courier, monospace;
-    height: 100%;
+    font-size: 11pt;
+    height: 100% !important;
+    word-break: break-all;
 }
