@@ -56,9 +56,15 @@ var app = new Vue({
             console.log(this.fixMessages[index].text.replace(ALL_SEPARATORS_REGEX, newSeparator));
         },
         onPaste: function (e, fixMessageIndex) {
+            if (this.fixMessages[fixMessageIndex].text.length > 0)
+                return true;
             let clipboardData = e.clipboardData || window.clipboardData;
             let pastedData = clipboardData.getData('Text');
-            let messages = asMultipleMessages(pastedData);
+            let messages = asMultipleMessages(pastedData).map(function (text) {
+                return text.trim();
+            }).filter(function (text) {
+                return text.length > 0;
+            });
             if (messages.length > 1) {
                 e.stopPropagation();
                 e.preventDefault();
@@ -78,7 +84,7 @@ function formattedFix(fixMessages, fieldsByTag, fixEnums) {
     let fixMessageFields = fixMessages.map(splitRawFix);
     let allFields = new Set();
     let popularity = {};
-    fixMessageFields.forEach(fields => {
+    fixMessageFields.forEach(function (fields) {
         let fieldValues = {};
         fields.forEach(field => {
             let fieldTag = field[0];
@@ -99,7 +105,7 @@ function formattedFix(fixMessages, fieldsByTag, fixEnums) {
         if (popularity[i]) {
             let valuePopularities = Object.keys(popularity[i]);
             let singleValue = (valuePopularities.length == 1);
-            valuePopularities.forEach(valuePopularity => {
+            valuePopularities.forEach(function (valuePopularity) {
                 let pop = popularity[i][valuePopularity];
                 if (fixMessages.length == 1) {
                     popularity[i][valuePopularity] = -1;
@@ -123,7 +129,7 @@ function formattedFix(fixMessages, fieldsByTag, fixEnums) {
                     values: []
                 };
                 let values = [];
-                fields.forEach(field => {
+                fields.forEach(function (field) {
                     if (field[0] == i) {
                         values.push(field[1]);
                         annotatedValues.values.push(
@@ -143,7 +149,7 @@ function formattedFix(fixMessages, fieldsByTag, fixEnums) {
 function asMultipleMessages(rawFix) {
     let newLineIndex = rawFix.indexOf('\n');
     if (rawFix.search(/(?:^A|[\|\x01])/) != -1 && newLineIndex != -1 && newLineIndex != rawFix.length - 1) {
-        return rawFix.split('\n');
+        return rawFix.split('\n')
     } else {
         return [rawFix];
     }
