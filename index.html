@@ -30,6 +30,7 @@
                             <li class="collection-item">Format FIX messages</li>
                             <li class="collection-item">Compare FIX messages (diff)</li>
                             <li class="collection-item">Replace separators</li>
+                            <li class="collection-item">Private, client-side processing</li>
                         </ul>
                         <div class="input-field">
                             <select v-model="replacementSeparator">
@@ -51,7 +52,7 @@
                                     <!-- <label for="textarea1">FIX</label> -->
                                 </div>
                             </div>
-                            <div class="card-action">
+                            <div class="card-action message-actions">
                                 <button @click="removeMessage(fixMessageIndex)"
                                     class="waves-effect waves-light btn-small red"><i
                                         class="material-icons left">remove</i>Remove</button>
