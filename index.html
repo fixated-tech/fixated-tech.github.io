@@ -8,6 +8,16 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-150387544-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-150387544-1');
+    </script>
+
     <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -90,20 +100,29 @@
 
         <ul class="collapsible features">
             <li>
-                <div class="collapsible-header blue-grey lighten-4"><i class="material-icons">format_list_numbered</i>Format FIX messages</div>
-                <div class="collapsible-body"><span>Messages are converted into a sorted, easy-to-read table.</span></div>
+                <div class="collapsible-header blue-grey lighten-4"><i
+                        class="material-icons">format_list_numbered</i>Format FIX messages</div>
+                <div class="collapsible-body"><span>Messages are converted into a sorted, easy-to-read table.</span>
+                </div>
             </li>
             <li>
-                <div class="collapsible-header blue-grey lighten-4"><i class="material-icons">compare_arrows</i>Compare FIX messages</div>
-                <div class="collapsible-body"><span>Messages are colored by similarities and differences when multiple messages are viewed.</span></div>
+                <div class="collapsible-header blue-grey lighten-4"><i class="material-icons">compare_arrows</i>Compare
+                    FIX messages</div>
+                <div class="collapsible-body"><span>Messages are colored by similarities and differences when multiple
+                        messages are viewed.</span></div>
             </li>
             <li>
-                <div class="collapsible-header blue-grey lighten-4"><i class="material-icons">repeat</i>Replace separators</div>
-                <div class="collapsible-body"><span>"|" (pipe), ^A (0x01, SOH), "^A" (the control-escaped version of 0x01), and "\n" (new line) are all recognized as field separators, and can be replaced with the 'Separator' button.</span></div>
+                <div class="collapsible-header blue-grey lighten-4"><i class="material-icons">repeat</i>Replace
+                    separators</div>
+                <div class="collapsible-body"><span>"|" (pipe), ^A (0x01, SOH), "^A" (the control-escaped version of
+                        0x01), and "\n" (new line) are all recognized as field separators, and can be replaced with the
+                        'Separator' button.</span></div>
             </li>
             <li>
-                <div class="collapsible-header blue-grey lighten-4"><i class="material-icons">cloud_off</i>Private, client-side processing</div>
-                <div class="collapsible-body"><span>All processing is performed on your device so it is safe to use with your or your client's data.</span></div>
+                <div class="collapsible-header blue-grey lighten-4"><i class="material-icons">cloud_off</i>Private,
+                    client-side processing</div>
+                <div class="collapsible-body"><span>All processing is performed on your device so it is safe to use with
+                        your or your client's data.</span></div>
             </li>
         </ul>
     </div>
