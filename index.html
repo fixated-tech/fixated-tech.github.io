@@ -25,22 +25,18 @@
                             <image xlink:href="images/logo.svg" src="images/logo-small.png" width="256" height="64">
                             </image>
                         </svg>
-                        <br/>
+                        <br />
                         Working with FIX protocol messages
-                        <ul class="collection">
-                            <li class="collection-item">Format FIX messages</li>
-                            <li class="collection-item">Compare FIX messages (diff)</li>
-                            <li class="collection-item">Replace separators</li>
-                            <li class="collection-item">Private, client-side processing</li>
-                        </ul>
-                        <div class="input-field">
-                            <select v-model="replacementSeparator">
-                                <option value="0" selected>Pipe ("|")</option>
-                                <option value='1'>"^A"</option>
-                                <option value="2">^A (\x01)</option>
-                                <option value="3">New line ("\n")</option>
-                            </select>
-                            <label>Replace separators with</label>
+                        <div class="options">
+                            <div class="input-field">
+                                <select v-model="replacementSeparator">
+                                    <option value="0" selected>Pipe ("|")</option>
+                                    <option value='1'>"^A"</option>
+                                    <option value="2">^A (\x01)</option>
+                                    <option value="3">New line ("\n")</option>
+                                </select>
+                                <label>Replace separators with</label>
+                            </div>
                         </div>
                     </td>
                     <td v-for="(fixMessage, fixMessageIndex) in fixMessages" v-bind:key="fixMessageIndex">
@@ -59,7 +55,7 @@
                                         class="material-icons left">remove</i>Remove</button>
                                 <button @click="replaceSeparators(fixMessageIndex)"
                                     class="waves-effect waves-light btn-small teal lighten-2"><i
-                                        class="material-icons left">repeat</i>Separators</button>
+                                        class="material-icons left">repeat</i>Separator</button>
                                 <button @click="duplicateMessage(fixMessageIndex)"
                                     class="waves-effect waves-light btn-small blue"><i
                                         class="material-icons left">file_copy</i>Clone</button>
@@ -91,7 +87,34 @@
                 </tr>
             </tbody>
         </table>
+
+        <ul class="collapsible features">
+            <li>
+                <div class="collapsible-header blue-grey lighten-4"><i class="material-icons">format_list_numbered</i>Format FIX messages</div>
+                <div class="collapsible-body"><span>Messages are converted into a sorted, easy-to-read table.</span></div>
+            </li>
+            <li>
+                <div class="collapsible-header blue-grey lighten-4"><i class="material-icons">compare_arrows</i>Compare FIX messages</div>
+                <div class="collapsible-body"><span>Messages are colored by similarities and differences when multiple messages are viewed.</span></div>
+            </li>
+            <li>
+                <div class="collapsible-header blue-grey lighten-4"><i class="material-icons">repeat</i>Replace separators</div>
+                <div class="collapsible-body"><span>"|" (pipe), ^A (0x01, SOH), "^A" (the control-escaped version of 0x01), and "\n" (new line) are all recognized as field separators, and can be replaced with the 'Separator' button.</span></div>
+            </li>
+            <li>
+                <div class="collapsible-header blue-grey lighten-4"><i class="material-icons">cloud_off</i>Private, client-side processing</div>
+                <div class="collapsible-body"><span>All processing is performed on your device so it is safe to use with your or your client's data.</span></div>
+            </li>
+        </ul>
     </div>
+    <p><svg class="title" width="64" height="16" alt="Fixated" title="Fixated">
+            <image xlink:href="images/logo.svg" src="images/logo-small.png" width="64" height="16">
+            </image>
+        </svg> by Alex Taylor (<a href="https://twitter.com/thatalextaylor">@thatalextaylor</a>). Code available on <a
+            href="https://github.com/fixated-tech/fixated-tech.github.io">GitHub</a>. Copyright ©2019 Alex Taylor.
+        Distributed under the <a
+            href="https://raw.githubusercontent.com/fixated-tech/fixated-tech.github.io/master/LICENSE">MIT license</a>.
+    </p>
     <script src="https://cdn.jsdelivr.net/npm/vue" type="text/javascript"></script>
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"> type = "text/javascript"</script>

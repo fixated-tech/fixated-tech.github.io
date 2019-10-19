@@ -99,7 +99,7 @@ function formattedFix(fixMessages, fieldsByTag, fixEnums) {
         });
     });
     let fieldKeys = Array.from(allFields);
-    fieldKeys.sort();
+    fieldKeys.sort(function(a, b) { return parseInt(a) - parseInt(b); });
     let result = [];
     fieldKeys.forEach(i => {
         if (popularity[i]) {
@@ -170,6 +170,6 @@ function splitRawField(rawField) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    var elems = document.querySelectorAll('select');
-    var instances = M.FormSelect.init(elems, {});
+    M.FormSelect.init(document.querySelectorAll('select'), {});
+    M.Collapsible.init(document.querySelectorAll('.collapsible'), {});
 });

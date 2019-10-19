@@ -22,15 +22,15 @@
     vertical-align: top;
 }
 
+.options {
+    padding-top: 3rem;
+}
+
 .fixed-column {
     width: 10rem;
 }
 
 .card-content {
-    height: 100%;
-}
-
-.input-field {
     height: 100%;
 }
 
@@ -51,6 +51,10 @@
 
 .message-actions button {
     max-width: 10rem;
+}
+
+.features {
+    padding-top: 3rem;
 }
 
 body {
